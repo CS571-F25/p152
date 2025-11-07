@@ -1,0 +1,70 @@
+/* src/styles/mood.css */
+
+/* Base color tokens */
+:root {
+  --m1: #8FE388; /* default: happy */
+  --m2: #2EC4B6;
+  --m3: #4DA3FF;
+  --bg: #0b1020;          /* upper ambient */
+  --bg-bottom: #123057;   /* NEW: bottom tint */
+}
+
+/* Swap tokens by mood */
+.mood-happy       { --m1:#8FE388; --m2:#2EC4B6; --m3:#4DA3FF; --bg-bottom:#0e4d3a; }
+.mood-calm        { --m1:#B2F7EF; --m2:#6EF0FF; --m3:#6F7FFF; --bg-bottom:#0c3d66; }
+.mood-energetic   { --m1:#FFE66D; --m2:#FF9F1C; --m3:#FF4D94; --bg-bottom:#5a1740; }
+.mood-sad         { --m1:#6B7C8E; --m2:#3A78C2; --m3:#1E3A8A; --bg-bottom:#0b2a6a; }
+
+/* Full-viewport, non-interactive background */
+.mood-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  /* Layer order: top wash → floor glow → three spotlights → soft vertical blend → base gradient */
+  background-image:
+    /* subtle top wash */
+    radial-gradient(120% 100% at 50% 110%, rgba(255,255,255,0.06), rgba(255,255,255,0) 60%),
+
+    /* NEW: colored floor glow near bottom edge */
+    radial-gradient(140% 70% at 50% 118%,
+      color-mix(in oklab, var(--m3) 60%, transparent) 0%,
+      transparent 72%
+    ),
+
+    /* spotlights */
+    radial-gradient(40% 45% at 18% 18%, color-mix(in oklab, var(--m1) 80%, transparent), transparent 70%),
+    radial-gradient(40% 45% at 50% 22%, color-mix(in oklab, var(--m2) 80%, transparent), transparent 70%),
+    radial-gradient(40% 45% at 82% 26%, color-mix(in oklab, var(--m3) 80%, transparent), transparent 70%),
+
+    /* gentle vertical blend */
+    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.18)),
+
+    /* base → bottom color (no hard black) */
+    linear-gradient(180deg, var(--bg), var(--bg-bottom));
+
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  filter: saturate(1.05) contrast(1.02);
+}
+
+/* Optional vignette for edge readability */
+.mood-bg::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(120% 120% at 50% 50%, transparent 60%, rgba(0,0,0,0.25) 100%);
+  pointer-events: none;
+}
+
+/* Gentle shimmer to reduce banding */
+@media (prefers-reduced-motion: no-preference) {
+  .mood-bg { animation: mood-drift 14s ease-in-out infinite alternate; }
+  @keyframes mood-drift {
+    from { filter: saturate(1.05) contrast(1.02) brightness(1.00); }
+    to   { filter: saturate(1.08) contrast(1.03) brightness(1.03); }
+  }
+}
+
+/* Ensure the app fills the viewport so the background shows */
+html, body, #root { height: 100%; }
