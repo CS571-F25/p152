@@ -8,9 +8,13 @@ export default function NavBar() {
           <NavLink end to="/" className="mt-link">
             Home
           </NavLink>
+          <NavLink to="/saved-songs" className="mt-link">
+            Saved Songs
+          </NavLink>
           <NavLink to="/aboutme" className="mt-link">
             About
           </NavLink>
+
 
           {/* Add more when ready:
           <NavLink to="/moods" className="mt-link">Moods</NavLink>

@@ -6,7 +6,7 @@ export default function AboutMe(props) {
             <Card.Body>
                 <Card.Title style={{fontSize: '32px'}}>About</Card.Title>
                 <Card.Text>
-                    Website developed by Lukas H
+                    Website developed by Lukas Hensel
                 </Card.Text>
             </Card.Body>
         </Card>
